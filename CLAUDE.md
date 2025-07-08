@@ -1,235 +1,271 @@
-# CLAUDE.md - slack-models Repository Guide
+# slack-models
+
+Comprehensive Pydantic models for working with the Slack API, providing type-safe, validated data structures for Slack API integration.
 
 ## Project Overview
 
-**slack-models** is a Python library providing comprehensive Pydantic models for working with the Slack API. The library offers type-safe data structures for Slack events, webhooks, users, channels, files, and other API objects.
+**Library Type**: Python package providing Pydantic models for Slack API data structures
+**Language**: Python 3.12+
+**License**: BSD-3-Clause
+**Package Name**: slack-models
+**Version**: 1.0.0
+**Author**: Gavin M. Roy <gavinr@aweber.com>
 
-### Key Information
-- **Purpose**: Pydantic Models for Slack API integration
-- **License**: BSD-3-clause
-- **Python Requirements**: 3.12+
-- **Main Dependency**: pydantic>=2.11.3,<3
-- **Author**: Gavin M. Roy <gavinr@aweber.com>
-- **Repository**: https://github.com/gmr/slack-models
-- **Documentation**: https://gmr.github.io/slack-models/
+## Architecture
 
-## Project Architecture
+### Core Components
+- **Private Modules**: `_models.py` (221 statements), `_utils.py` (7 statements)
+- **Public API**: All models exported through `__init__.py` with comprehensive `__all__` list
+- **Event System**: `EVENT_MAP` dictionary for type-based event model selection
+- **Parser Utility**: `parse_event()` function for webhook payload parsing
 
-### Package Structure
+### Key Models (26 total)
+**Event Models**: `MessageEvent`, `AppMentionEvent`, `ReactionAddedEvent`, `ReactionRemovedEvent`, `ChannelCreatedEvent`, `ChannelDeletedEvent`, `ChannelRenameEvent`, `TeamJoinEvent`, `FileCreatedEvent`, `FileDeletedEvent`
+
+**Core Objects**: `Channel`, `User`, `UserProfile`, `EnterpriseUser`, `File`, `FileContent`, `Authorization`, `ChatMessage`
+
+**Webhook Models**: `SlackEventCallback`, `SlackUrlVerification`, `SlackAppRateLimited`, `SlackWebhookPayload`
+
+**Supporting Models**: `Reaction`, `MessageItem`, `MessageEdited`, `BaseSlackEvent`
+
+**Union Types**: `SlackEvent` (all event types), `SlackWebhookPayload` (all webhook payloads)
+
+### API Compliance
+- **Standards Compliant**: Strict adherence to official Slack API specifications
+- **Channel Model**: Follows legacy Slack API Channel object exactly (20+ fields)
+- **No Custom Fields**: Removed all custom AJ bot fields to maintain API compliance
+- **Validated Models**: All models match official Slack object structures
+
+## Dependencies
+
+### Core Dependencies
+```toml
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.11.3,<3"]
 ```
-slack-models/
-├── src/slack_models/           # Main package (src-layout)
-│   ├── __init__.py            # Package metadata and version
-│   ├── models.py              # All Pydantic models
-│   └── py.typed               # Type annotations marker
-├── tests/                     # Test directory (currently empty)
-├── pyproject.toml             # Project configuration
-├── mkdocs.yml                 # Documentation configuration
-├── .pre-commit-config.yaml    # Pre-commit hooks
-├── .github/workflows/         # GitHub Actions CI/CD
-└── README.md                  # Basic project information
-```
 
-### Core Models Architecture
-
-The library is organized around several model categories:
-
-1. **Core Slack Objects**:
-   - `User`: Comprehensive user representation with profile and enterprise data
-   - `Channel`: Workspace channel information following official Slack API
-   - `File` & `FileContent`: File sharing and content handling
-   - `UserProfile` & `EnterpriseUser`: Extended user information
-
-2. **Event Models**:
-   - `MessageEvent`: Channel message events
-   - `AppMentionEvent`: App mention notifications
-   - `ReactionAddedEvent` & `ReactionRemovedEvent`: Reaction events
-   - `TeamJoinEvent`: New member notifications
-   - `FileCreatedEvent` & `FileDeletedEvent`: File events
-   - `ChannelCreatedEvent`, `ChannelDeletedEvent`, `ChannelRenameEvent`: Channel events
-
-3. **Webhook Models**:
-   - `SlackEventCallback`: Standard event callback envelope
-   - `SlackUrlVerification`: URL verification challenge
-   - `SlackAppRateLimited`: Rate limiting notifications
-
-4. **Supporting Models**:
-   - `Reaction`, `MessageItem`, `MessageEdited`, `Authorization`
-   - `ChatMessage`: Bot conversation history and context
-
-5. **Union Types**:
-   - `SlackEvent`: All possible event types
-   - `SlackWebhookPayload`: All webhook payload types
-   - `EVENT_MAP`: Dictionary mapping event types to model classes
+### Development Dependencies
+- **Build**: `hatchling` (build system)
+- **Testing**: `pytest`, `pytest-cov`, `coverage>=7.6.10,<8`
+- **Code Quality**: `ruff>=0.9.5,<0.12.0`, `mypy`, `pre-commit>=4.1.0,<5`
+- **Documentation**: `mkdocs>=1.5,<2`, `mkdocs-material>9.5,<10`, `mkdocstrings[python]>=0.26,<0.27`
 
 ## Development Workflow
 
-### Build System
-- **Build Backend**: hatchling (modern Python packaging)
-- **Layout**: src-layout packaging for clean organization
-- **Version Management**: Direct version string in pyproject.toml (currently "1.0.0")
-
-### Development Commands
-
+### Setup Commands
 ```bash
-# Setup development environment
-python -m pip install --upgrade pip
+# Clone and setup environment
+git clone https://github.com/gmr/slack-models.git
+cd slack-models
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install development dependencies
 pip install -e '.[dev]'
 
 # Install pre-commit hooks
 pre-commit install
+```
 
+### Testing
+```bash
+# Run full test suite (140 tests, 99% coverage)
+pytest
+
+# Run with coverage report
+pytest --cov=slack_models --cov-report=html
+
+# Current status: 140 tests, 0.19s execution time, 99% coverage
+# Missing coverage: lines 44-46 in __init__.py (version fallback)
+```
+
+### Code Quality
+```bash
 # Run linting
 ruff check .
+
+# Run formatting
 ruff format .
 
 # Run type checking
 mypy src/slack_models
 
-# Run tests (when implemented)
-pytest --cov --cov-report=xml
+# Run pre-commit hooks
+pre-commit run --all-files
+```
 
+### Documentation
+```bash
 # Build documentation
 mkdocs build
 
-# Build package
-python -m build --wheel
+# Serve documentation locally
+mkdocs serve
+
+# Documentation structure:
+# - index.md, installation.md, quickstart.md
+# - examples/basic.md, examples/events.md
+# - api/models.md, api/utils.md
+# - development/contributing.md, development/testing.md, development/changelog.md
 ```
 
-### Code Quality Standards
+### Building and Publishing
+```bash
+# Build wheel
+python -m build
 
-**Linting Configuration (ruff)**:
-- Line length: 79 characters
-- Target: Python 3.12
-- Single quotes preferred
-- Comprehensive rules: ANN, ASYNC, B, E/W, F, S
-- Type annotations required (ANN rules)
+# Build artifacts: build/ and dist/ directories
+```
 
-**Testing**:
-- Framework: pytest with coverage
-- Minimum coverage: 90% (configured in pyproject.toml)
-- Current status: Tests directory exists but is empty
+## Configuration
 
-**Type Checking**:
-- Tool: mypy for static type analysis
-- py.typed file indicates full type annotation support
+### Project Configuration (`pyproject.toml`)
+- **Build System**: `hatchling` with src-layout packaging
+- **Version Management**: Direct version string in `project.version`
+- **Line Length**: 79 characters (ruff configuration)
+- **Quote Style**: Single quotes
+- **Coverage Minimum**: 90% (currently 99%)
 
-## Key Files and Relationships
+### Ruff Configuration
+```toml
+line-length = 79
+target-version = "py312"
+select = ["ANN", "ASYNC", "B", "BLE", "C4", "DTZ", "E", "W", "F", "G", "I", "S", "T20", "UP", "F401", "F841", "B027", "B905"]
+ignore = ["ANN401", "RSE"]
+```
 
-### /src/slack_models/models.py
-- **Purpose**: Contains all Pydantic model definitions
-- **Key Features**:
-  - Python 3.10+ union syntax (| operator)
-  - Comprehensive docstrings with Slack API references
-  - Type-safe event handling with EVENT_MAP dictionary
-  - Strict adherence to official Slack API specifications
+## Usage Patterns
 
-### /src/slack_models/__init__.py
-- **Purpose**: Package metadata and version management
-- **Key Features**:
-  - Dynamic version detection via importlib.metadata
-  - Fallback to '0.0.0-dev' for development
-  - Export configuration via __all__
+### Basic Event Parsing
+```python
+from slack_models import parse_event, SlackEventCallback, MessageEvent
 
-### /pyproject.toml
-- **Purpose**: Central project configuration
-- **Key Sections**:
-  - Build system: hatchling configuration
-  - Dependencies: pydantic core, dev tools, docs tools
-  - Tool configurations: ruff, pytest, coverage, mypy
+# Parse webhook payload
+event = parse_event(webhook_data)
+if isinstance(event, SlackEventCallback):
+    if isinstance(event.event, MessageEvent):
+        print(f"Message: {event.event.text}")
+```
 
-## Dependencies and Requirements
+### Direct Model Usage
+```python
+from slack_models import Channel, User, MessageEvent
 
-### Core Dependencies
-- **pydantic**: >=2.11.3,<3 (core data modeling)
+# Create validated models
+channel = Channel(id="C1234567890", name="general")
+user = User(id="U1234567890", name="john.doe")
+```
 
-### Development Dependencies
-- **build**: Package building
-- **coverage**: Test coverage reporting
-- **mypy**: Static type checking
-- **pre-commit**: Git hooks
-- **pytest** & **pytest-cov**: Testing framework
-- **ruff**: Linting and formatting
+### Event Type Mapping
+```python
+from slack_models import EVENT_MAP
 
-### Documentation Dependencies
-- **mkdocs** & **mkdocs-material**: Documentation generation
-- **mkdocstrings**: API documentation from docstrings
-- **black**: Code formatting for signatures
-- **griffe-pydantic**: Pydantic model documentation
+# Access event type mappings
+model_class = EVENT_MAP.get('message')  # Returns MessageEvent
+```
 
-## Testing Approach
+## Testing Strategy
 
-### Current Status
-- Tests directory exists but contains no test files
-- pytest configuration in pyproject.toml ready for implementation
-- Coverage reporting configured (90% minimum)
+### Test Organization (6 modules)
+- **test_data.py**: Test fixtures and data constants
+- **test_events.py**: Event model validation tests
+- **test_imports.py**: Import system and module structure tests
+- **test_models.py**: Core model validation tests
+- **test_unions_and_utils.py**: Union types and utility function tests
+- **test_webhooks.py**: Webhook payload model tests
 
-### Testing Strategy (Recommended)
-- Unit tests for each Pydantic model
-- Validation tests for edge cases and error conditions
-- Integration tests for EVENT_MAP functionality
-- Documentation tests for code examples
+### Coverage Details
+- **Total Coverage**: 99% (236 statements, 2 missed)
+- **_models.py**: 100% coverage (221 statements)
+- **_utils.py**: 100% coverage (7 statements)
+- **__init__.py**: 75% coverage (version fallback not tested)
 
-## CI/CD Pipeline
+### Test Execution
+- **Performance**: 140 tests in 0.19 seconds
+- **Framework**: pytest with unittest.TestCase patterns
+- **Validation**: Comprehensive model validation and edge case testing
 
-### GitHub Actions
-- **test.yml**: Main CI pipeline
-- **Matrix Testing**: Python 3.12 and 3.13
-- **Steps**:
-  1. Checkout code
-  2. Install Hatch
-  3. Setup Python environment
-  4. Install dependencies
-  5. Lint with ruff
-  6. Type check with mypy
-  7. Test with pytest (coverage)
-  8. Upload coverage to Codecov
+## Common Development Tasks
 
-### Pre-commit Hooks
-- File validation (shebang, TOML, YAML)
-- Debug statement detection
-- File ending and whitespace fixes
-- ruff format and check
+### Adding New Models
+1. Add model class to `src/slack_models/_models.py`
+2. Add model to `EVENT_MAP` if it's an event type
+3. Export model in `src/slack_models/__init__.py` `__all__` list
+4. Add comprehensive tests in appropriate test module
+5. Update documentation in `docs/api/models.md`
 
-## Special Conventions and Patterns
+### Updating Documentation
+1. Modify relevant `.md` files in `docs/` directory
+2. Run `mkdocs serve` to preview changes
+3. Build with `mkdocs build` to generate static site
+
+### Running Pre-commit
+```bash
+# Always run after any changes
+pre-commit run --all-files
+
+# Hooks include:
+# - ruff format (code formatting)
+# - ruff check (linting)
+# - check-toml, check-yaml (configuration validation)
+# - debug-statements (prevent debug code)
+# - end-of-file-fixer, trailing-whitespace (file formatting)
+```
+
+## Architecture Decisions
+
+### Private Module Pattern
+- Models in `_models.py` to encourage import from package root
+- Utilities in `_utils.py` for internal helper functions
+- All public API through `__init__.py` with explicit `__all__` exports
+
+### Type Safety
+- Python 3.12+ union syntax (`|` operator) throughout
+- Comprehensive type annotations with `py.typed` marker
+- Pydantic 2.x for runtime validation and IDE support
 
 ### API Compliance
-The library strictly follows the official Slack API specifications:
-- All models match official Slack API object structures
-- No custom fields beyond what Slack provides
-- `ChatMessage`: Bot conversation history and context management
-- Comprehensive type safety with Pydantic validation
+- Strict adherence to official Slack API specifications
+- Removed all custom fields to maintain compatibility
+- Official Slack API documentation referenced in model docstrings
 
-### Code Style
-- Python 3.10+ type hints with union operator (|)
-- Single quotes for strings
-- Comprehensive docstrings with Slack API references
-- Type annotations required for all functions and methods
-- 79-character line length limit
+### Event Mapping System
+- `EVENT_MAP` dictionary for efficient event type resolution
+- Union types (`SlackEvent`, `SlackWebhookPayload`) for type safety
+- `parse_event()` utility for convenient webhook parsing
 
-### Model Design Patterns
-- Union types for polymorphic data structures
-- Literal types for event type discrimination
-- Optional fields with proper defaults
-- Extra configuration handling where needed
-- Comprehensive field documentation
+## Build and Deployment
 
-## Development Notes
+### Package Structure
+```
+slack-models/
+├── src/slack_models/          # Source code
+│   ├── __init__.py           # Public API exports
+│   ├── _models.py            # Pydantic model definitions
+│   ├── _utils.py             # Utility functions
+│   └── py.typed              # Type annotations marker
+├── tests/                    # Test suite (6 modules)
+├── docs/                     # MkDocs documentation
+├── pyproject.toml           # Project configuration
+└── mkdocs.yml               # Documentation configuration
+```
 
-### Missing Components
-- No actual test implementations (tests/ directory empty)
-- No VERSION file (version managed in pyproject.toml)
-- No bootstrap script (uses GitHub Actions exclusively)
-- No CI scripts directory (modern GitHub Actions approach)
+### GitHub Integration
+- **Repository**: https://github.com/gmr/slack-models
+- **Documentation**: https://gmr.github.io/slack-models/
+- **Issues**: https://github.com/gmr/slack-models/issues
 
-### Documentation
-- MkDocs with Material theme
-- Automatic API documentation via mkdocstrings
-- GitHub Pages deployment configured
-- Single-page documentation structure
+## Performance Characteristics
 
-### Future Considerations
-- Implement comprehensive test suite
-- Add examples and usage documentation
-- Consider adding utility functions for common operations
-- Evaluate need for additional Slack API models
+- **Import Time**: Fast due to minimal dependencies
+- **Validation Performance**: Pydantic 2.x optimized validation
+- **Test Execution**: 140 tests in 0.19 seconds
+- **Memory Usage**: Minimal runtime overhead
+- **Type Checking**: mypy support for static analysis
+
+## Future Considerations
+
+- **Version Strategy**: Semantic versioning with backward compatibility
+- **API Updates**: Track Slack API changes for model updates
+- **Performance**: Monitor validation performance as models grow
+- **Documentation**: Keep API documentation in sync with Slack API changes
