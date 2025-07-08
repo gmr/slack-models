@@ -36,7 +36,7 @@ The library is organized around several model categories:
 
 1. **Core Slack Objects**:
    - `User`: Comprehensive user representation with profile and enterprise data
-   - `Channel`: Workspace channel information (includes AJ bot custom fields)
+   - `Channel`: Workspace channel information following official Slack API
    - `File` & `FileContent`: File sharing and content handling
    - `UserProfile` & `EnterpriseUser`: Extended user information
 
@@ -55,7 +55,7 @@ The library is organized around several model categories:
 
 4. **Supporting Models**:
    - `Reaction`, `MessageItem`, `MessageEdited`, `Authorization`
-   - `ChatMessage`: Bot conversation history (AJ bot specific)
+   - `ChatMessage`: Bot conversation history and context
 
 5. **Union Types**:
    - `SlackEvent`: All possible event types
@@ -122,7 +122,7 @@ python -m build --wheel
   - Python 3.10+ union syntax (| operator)
   - Comprehensive docstrings with Slack API references
   - Type-safe event handling with EVENT_MAP dictionary
-  - Custom fields for AJ bot integration
+  - Strict adherence to official Slack API specifications
 
 ### /src/slack_models/__init__.py
 - **Purpose**: Package metadata and version management
@@ -193,14 +193,12 @@ python -m build --wheel
 
 ## Special Conventions and Patterns
 
-### AJ Bot Integration
-The library includes custom fields specifically for AJ bot integration:
-- `Channel.should_answer_questions`: Bot response configuration
-- `Channel.priority`: Channel priority for bot responses
-- `Channel.is_open`: Channel availability status
-- `Channel.updated`: Last update timestamp
-- `Channel.user`: Associated user
-- `ChatMessage`: Bot-specific conversation history model
+### API Compliance
+The library strictly follows the official Slack API specifications:
+- All models match official Slack API object structures
+- No custom fields beyond what Slack provides
+- `ChatMessage`: Bot conversation history and context management
+- Comprehensive type safety with Pydantic validation
 
 ### Code Style
 - Python 3.10+ type hints with union operator (|)
