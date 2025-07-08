@@ -241,12 +241,11 @@ class BaseSlackEvent(pydantic.BaseModel):
     """Base class for all Slack event types.
 
     Contains common fields shared across all Slack events including
-    event type, optional user ID, timestamp, and event timestamp.
+    event type, timestamp, and event timestamp.
     All specific event types inherit from this base class.
     """
 
     type: str
-    user: str | None = None
     ts: str | None = None
     event_ts: str | None = None
 
@@ -342,7 +341,7 @@ class TeamJoinEvent(BaseSlackEvent):
     """
 
     type: typing.Literal['team_join'] = 'team_join'
-    user: dict  # Full user object
+    user: User  # Full user object - override base class string type
     event_ts: str
 
 
@@ -356,6 +355,7 @@ class FileCreatedEvent(BaseSlackEvent):
     """
 
     type: typing.Literal['file_created'] = 'file_created'
+    file_id: str
     file: dict  # Full file object
     user_id: str
     event_ts: str

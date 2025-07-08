@@ -202,6 +202,7 @@ TEAM_JOIN_EVENT_DATA = {
 
 FILE_CREATED_EVENT_DATA = {
     'type': 'file_created',
+    'file_id': 'F1234567890',
     'file': FILE_DATA,
     'user_id': 'U1234567890',
     'event_ts': '1640995200.000100',

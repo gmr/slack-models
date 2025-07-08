@@ -229,8 +229,8 @@ class TestTeamJoinEvent(unittest.TestCase):
         event = slack_models.TeamJoinEvent(**TEAM_JOIN_EVENT_DATA)
 
         self.assertEqual(event.type, 'team_join')
-        self.assertIsInstance(event.user, dict)
-        self.assertEqual(event.user['id'], 'U1234567890')
+        self.assertIsInstance(event.user, slack_models.User)
+        self.assertEqual(event.user.id, 'U1234567890')
         self.assertEqual(event.event_ts, '1640995200.000100')
 
     def test_team_join_event_minimal_data(self) -> None:
@@ -242,8 +242,8 @@ class TestTeamJoinEvent(unittest.TestCase):
         )
 
         self.assertEqual(event.type, 'team_join')
-        self.assertIsInstance(event.user, dict)
-        self.assertEqual(event.user['id'], 'U1234567890')
+        self.assertIsInstance(event.user, slack_models.User)
+        self.assertEqual(event.user.id, 'U1234567890')
         self.assertEqual(event.event_ts, '1640995200.000100')
 
     def test_team_join_event_missing_required_fields(self) -> None:
@@ -260,6 +260,7 @@ class TestFileCreatedEvent(unittest.TestCase):
         event = slack_models.FileCreatedEvent(**FILE_CREATED_EVENT_DATA)
 
         self.assertEqual(event.type, 'file_created')
+        self.assertEqual(event.file_id, 'F1234567890')
         self.assertIsInstance(event.file, dict)
         self.assertEqual(event.file['id'], 'F1234567890')
         self.assertEqual(event.user_id, 'U1234567890')
@@ -269,12 +270,14 @@ class TestFileCreatedEvent(unittest.TestCase):
         """Test FileCreatedEvent with minimal required fields."""
         event = slack_models.FileCreatedEvent(
             type='file_created',
+            file_id='F1234567890',
             file={'id': 'F1234567890', 'name': 'test.txt'},
             user_id='U1234567890',
             event_ts='1640995200.000100',
         )
 
         self.assertEqual(event.type, 'file_created')
+        self.assertEqual(event.file_id, 'F1234567890')
         self.assertIsInstance(event.file, dict)
         self.assertEqual(event.file['id'], 'F1234567890')
         self.assertEqual(event.user_id, 'U1234567890')

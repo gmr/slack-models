@@ -409,13 +409,11 @@ class TestBaseSlackEvent(unittest.TestCase):
         """Test BaseSlackEvent with all fields."""
         event = slack_models.BaseSlackEvent(
             type='test_event',
-            user='U1234567890',
             ts='1640995200.000100',
             event_ts='1640995200.000100',
         )
 
         self.assertEqual(event.type, 'test_event')
-        self.assertEqual(event.user, 'U1234567890')
         self.assertEqual(event.ts, '1640995200.000100')
         self.assertEqual(event.event_ts, '1640995200.000100')
 
@@ -424,7 +422,6 @@ class TestBaseSlackEvent(unittest.TestCase):
         event = slack_models.BaseSlackEvent(type='test_event')
 
         self.assertEqual(event.type, 'test_event')
-        self.assertIsNone(event.user)
         self.assertIsNone(event.ts)
         self.assertIsNone(event.event_ts)
 
