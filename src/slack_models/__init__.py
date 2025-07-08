@@ -8,6 +8,7 @@ Pydantic Models for working with the Slack API
 from importlib import metadata
 
 from ._models import (
+    EVENT_MAP,
     AppMentionEvent,
     Authorization,
     BaseSlackEvent,
@@ -45,6 +46,7 @@ except metadata.PackageNotFoundError:
     version = '0.0.0-dev'
 
 __all__ = [
+    'EVENT_MAP',
     'AppMentionEvent',
     'Authorization',
     'BaseSlackEvent',

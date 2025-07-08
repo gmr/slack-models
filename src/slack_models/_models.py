@@ -38,12 +38,6 @@ class Channel(pydantic.BaseModel):
     topic: dict | None = None
     purpose: dict | None = None
     previous_names: list[str] | None = None
-    # Custom fields for AJ bot
-    should_answer_questions: bool = False
-    priority: int = 0
-    is_open: bool = False
-    updated: int | None = None
-    user: str = ''
 
 
 class UserProfile(pydantic.BaseModel):
