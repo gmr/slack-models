@@ -80,6 +80,10 @@ src-layout = true
 python = "python3.12"
 features = ["testing"]
 
+[tool.hatch.envs.default.scripts]
+github-pages = ["mkdocs gh-deploy --force"]
+serve-docs = ["mkdocs serve"]
+
 [tool.hatch.version]
 path = "VERSION"
 pattern = "(?P<version>.*)"
