@@ -18,7 +18,6 @@ class TestTopLevelImports(unittest.TestCase):
         self.assertTrue(hasattr(slack_models, 'EnterpriseUser'))
         self.assertTrue(hasattr(slack_models, 'File'))
         self.assertTrue(hasattr(slack_models, 'FileContent'))
-        self.assertTrue(hasattr(slack_models, 'ChatMessage'))
         self.assertTrue(hasattr(slack_models, 'Reaction'))
         self.assertTrue(hasattr(slack_models, 'MessageItem'))
         self.assertTrue(hasattr(slack_models, 'MessageEdited'))
@@ -69,9 +68,6 @@ class TestTopLevelImports(unittest.TestCase):
         self.assertTrue(issubclass(slack_models.File, pydantic.BaseModel))
         self.assertTrue(
             issubclass(slack_models.FileContent, pydantic.BaseModel)
-        )
-        self.assertTrue(
-            issubclass(slack_models.ChatMessage, pydantic.BaseModel)
         )
         self.assertTrue(issubclass(slack_models.Reaction, pydantic.BaseModel))
         self.assertTrue(
@@ -214,7 +210,6 @@ class TestAllExports(unittest.TestCase):
             'EnterpriseUser',
             'File',
             'FileContent',
-            'ChatMessage',
             'Reaction',
             'MessageItem',
             'MessageEdited',
@@ -238,6 +233,48 @@ class TestAllExports(unittest.TestCase):
             # Union types
             'SlackEvent',
             'SlackWebhookPayload',
+            # Block Kit Models
+            'ActionsBlock',
+            'BaseBlock',
+            'BaseBlockElement',
+            'Block',
+            'BlockElement',
+            'ButtonElement',
+            'ChannelsSelectElement',
+            'CheckboxesElement',
+            'ConfirmationDialog',
+            'ContextBlock',
+            'ConversationsSelectElement',
+            'DatePickerElement',
+            'DatetimePickerElement',
+            'DividerBlock',
+            'EmailInputElement',
+            'ExternalSelectElement',
+            'FileBlock',
+            'FileInputElement',
+            'HeaderBlock',
+            'ImageBlock',
+            'ImageElement',
+            'InputBlock',
+            'NumberInputElement',
+            'Option',
+            'OptionGroup',
+            'OverflowElement',
+            'PlainTextInputElement',
+            'RadioButtonsElement',
+            'RichTextBlock',
+            'RichTextElement',
+            'RichTextList',
+            'RichTextPreformatted',
+            'RichTextQuote',
+            'RichTextSection',
+            'SectionBlock',
+            'StaticSelectElement',
+            'TextObject',
+            'TimePickerElement',
+            'URLInputElement',
+            'UsersSelectElement',
+            'VideoBlock',
             # Utilities
             'EVENT_MAP',
             'parse_event',

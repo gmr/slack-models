@@ -1,7 +1,579 @@
-import datetime
+import enum
 import typing
 
 import pydantic
+
+# Block Kit Models
+
+
+class TextObject(pydantic.BaseModel):
+    """A text object for formatting text in Slack Block Kit.
+
+    Contains formatted text with type specification for plain text or
+    markdown rendering. Used throughout Block Kit for displaying text
+    content with optional emoji rendering and verbatim formatting.
+    """
+
+    type: typing.Literal['plain_text', 'mrkdwn']
+    text: str
+    emoji: bool | None = None
+    verbatim: bool | None = None
+
+
+class ConfirmationDialog(pydantic.BaseModel):
+    """A confirmation dialog composition object.
+
+    Defines a dialog that provides a confirmation step for interactive
+    elements. Contains title, explanatory text, and button labels for
+    confirm and deny actions.
+    """
+
+    title: TextObject
+    text: TextObject
+    confirm: TextObject
+    deny: TextObject
+
+
+class Option(pydantic.BaseModel):
+    """An option object for use in select menus and multi-select menus.
+
+    Represents a single selectable option containing display text and
+    a value. Optionally includes a description for additional context.
+    """
+
+    text: TextObject
+    value: str
+    description: TextObject | None = None
+    url: str | None = None
+
+
+class OptionGroup(pydantic.BaseModel):
+    """An option group object for organizing options in select menus.
+
+    Groups related options together with a label for improved
+    organization in select and multi-select menus.
+    """
+
+    label: TextObject
+    options: list[Option]
+
+
+class BaseBlockElement(pydantic.BaseModel):
+    """Base class for all Block Kit elements.
+
+    Contains common fields shared across all interactive elements
+    including action identifier for handling interactions.
+    """
+
+    type: str
+    action_id: str | None = None
+
+
+class ButtonElement(BaseBlockElement):
+    """A button element for user interaction.
+
+    Interactive element that triggers an action when clicked. Can be
+    styled as primary, danger, or default, and may include a URL for
+    navigation or confirmation dialog for safety.
+    """
+
+    type: typing.Literal['button'] = 'button'
+    text: TextObject
+    value: str | None = None
+    url: str | None = None
+    style: typing.Literal['primary', 'danger'] | None = None
+    confirm: ConfirmationDialog | None = None
+
+
+class CheckboxesElement(BaseBlockElement):
+    """A checkboxes element for multiple selections.
+
+    Allows users to select multiple options from a list of checkboxes.
+    Can have initial options selected and includes confirmation dialog
+    support for safety.
+    """
+
+    type: typing.Literal['checkboxes'] = 'checkboxes'
+    options: list[Option]
+    initial_options: list[Option] | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+
+
+class DatePickerElement(BaseBlockElement):
+    """A date picker element for selecting dates.
+
+    Provides a calendar interface for users to select a date.
+    Can have an initial date set and includes placeholder text
+    and confirmation dialog support.
+    """
+
+    type: typing.Literal['datepicker'] = 'datepicker'
+    initial_date: str | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+    placeholder: TextObject | None = None
+
+
+class DatetimePickerElement(BaseBlockElement):
+    """A datetime picker element for selecting date and time.
+
+    Combines date and time selection in a single interface.
+    Initial datetime is specified as Unix timestamp.
+    """
+
+    type: typing.Literal['datetimepicker'] = 'datetimepicker'
+    initial_date_time: int | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+
+
+class EmailInputElement(BaseBlockElement):
+    """An email input element for collecting email addresses.
+
+    Text input specifically designed for email address collection
+    with built-in validation and formatting.
+    """
+
+    type: typing.Literal['email_text_input'] = 'email_text_input'
+    initial_value: str | None = None
+    dispatch_action_config: dict | None = None
+    focus_on_load: bool | None = None
+    placeholder: TextObject | None = None
+
+
+class ImageElement(pydantic.BaseModel):
+    """An image element for displaying images in blocks.
+
+    Displays an image with alternative text for accessibility.
+    Can be used in various block types to enhance visual content.
+    """
+
+    type: typing.Literal['image'] = 'image'
+    image_url: str
+    alt_text: str
+
+
+class NumberInputElement(BaseBlockElement):
+    """A number input element for collecting numeric values.
+
+    Specialized text input for numeric data with optional minimum
+    and maximum value constraints and decimal precision control.
+    """
+
+    type: typing.Literal['number_input'] = 'number_input'
+    is_decimal_allowed: bool
+    initial_value: str | None = None
+    min_value: str | None = None
+    max_value: str | None = None
+    dispatch_action_config: dict | None = None
+    focus_on_load: bool | None = None
+    placeholder: TextObject | None = None
+
+
+class OverflowElement(BaseBlockElement):
+    """An overflow menu element for additional actions.
+
+    Displays a menu of options in a compact dropdown format.
+    Useful for secondary actions that don't need prominent placement.
+    """
+
+    type: typing.Literal['overflow'] = 'overflow'
+    options: list[Option]
+    confirm: ConfirmationDialog | None = None
+
+
+class PlainTextInputElement(BaseBlockElement):
+    """A plain text input element for collecting text input.
+
+    Basic text input field with support for single or multi-line input,
+    length constraints, and input validation through dispatch actions.
+    """
+
+    type: typing.Literal['plain_text_input'] = 'plain_text_input'
+    placeholder: TextObject | None = None
+    initial_value: str | None = None
+    multiline: bool | None = None
+    min_length: int | None = None
+    max_length: int | None = None
+    dispatch_action_config: dict | None = None
+    focus_on_load: bool | None = None
+
+
+class RadioButtonsElement(BaseBlockElement):
+    """A radio buttons element for single selection.
+
+    Allows users to select one option from a list of radio buttons.
+    Can have an initial option selected and confirmation dialog support.
+    """
+
+    type: typing.Literal['radio_buttons'] = 'radio_buttons'
+    options: list[Option]
+    initial_option: Option | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+
+
+class StaticSelectElement(BaseBlockElement):
+    """A static select menu with predefined options.
+
+    Select menu populated with a static list of options or option groups.
+    Supports single selection with optional initial selection and
+    confirmation dialog.
+    """
+
+    type: typing.Literal['static_select'] = 'static_select'
+    placeholder: TextObject
+    options: list[Option] | None = None
+    option_groups: list[OptionGroup] | None = None
+    initial_option: Option | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+
+
+class ExternalSelectElement(BaseBlockElement):
+    """A select menu with externally loaded options.
+
+    Select menu that loads options dynamically from an external source.
+    Supports search functionality and minimum query length specification.
+    """
+
+    type: typing.Literal['external_select'] = 'external_select'
+    placeholder: TextObject
+    initial_option: Option | None = None
+    min_query_length: int | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+
+
+class UsersSelectElement(BaseBlockElement):
+    """A select menu populated with workspace users.
+
+    Select menu automatically populated with users from the workspace.
+    Supports initial user selection and confirmation dialog.
+    """
+
+    type: typing.Literal['users_select'] = 'users_select'
+    placeholder: TextObject
+    initial_user: str | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+
+
+class ConversationsSelectElement(BaseBlockElement):
+    """A select menu populated with conversations.
+
+    Select menu for selecting conversations (channels, DMs, etc.)
+    with optional filtering and initial conversation selection.
+    """
+
+    type: typing.Literal['conversations_select'] = 'conversations_select'
+    placeholder: TextObject
+    initial_conversation: str | None = None
+    default_to_current_conversation: bool | None = None
+    confirm: ConfirmationDialog | None = None
+    response_url_enabled: bool | None = None
+    filter: dict | None = None
+    focus_on_load: bool | None = None
+
+
+class ChannelsSelectElement(BaseBlockElement):
+    """A select menu populated with public channels.
+
+    Select menu for selecting public channels from the workspace
+    with optional initial channel selection and confirmation.
+    """
+
+    type: typing.Literal['channels_select'] = 'channels_select'
+    placeholder: TextObject
+    initial_channel: str | None = None
+    confirm: ConfirmationDialog | None = None
+    response_url_enabled: bool | None = None
+    focus_on_load: bool | None = None
+
+
+class TimePickerElement(BaseBlockElement):
+    """A time picker element for selecting time values.
+
+    Provides an interface for users to select a time of day.
+    Initial time is specified in HH:mm format.
+    """
+
+    type: typing.Literal['timepicker'] = 'timepicker'
+    initial_time: str | None = None
+    confirm: ConfirmationDialog | None = None
+    focus_on_load: bool | None = None
+    placeholder: TextObject | None = None
+
+
+class URLInputElement(BaseBlockElement):
+    """A URL input element for collecting web addresses.
+
+    Text input specifically designed for URL collection with
+    built-in validation and formatting for web addresses.
+    """
+
+    type: typing.Literal['url_text_input'] = 'url_text_input'
+    initial_value: str | None = None
+    dispatch_action_config: dict | None = None
+    focus_on_load: bool | None = None
+    placeholder: TextObject | None = None
+
+
+class FileInputElement(BaseBlockElement):
+    """A file input element for file uploads.
+
+    Allows users to upload files with optional file type restrictions
+    and maximum file count limits.
+    """
+
+    type: typing.Literal['file_input'] = 'file_input'
+    filetypes: list[str] | None = None
+    max_files: int | None = None
+
+
+# Union type for all block elements
+BlockElement = (
+    ButtonElement
+    | CheckboxesElement
+    | DatePickerElement
+    | DatetimePickerElement
+    | EmailInputElement
+    | ImageElement
+    | NumberInputElement
+    | OverflowElement
+    | PlainTextInputElement
+    | RadioButtonsElement
+    | StaticSelectElement
+    | ExternalSelectElement
+    | UsersSelectElement
+    | ConversationsSelectElement
+    | ChannelsSelectElement
+    | TimePickerElement
+    | URLInputElement
+    | FileInputElement
+)
+
+
+class BaseBlock(pydantic.BaseModel):
+    """Base class for all Block Kit blocks.
+
+    Contains common fields shared across all block types including
+    block type and optional block identifier for referencing.
+    """
+
+    type: str
+    block_id: str | None = None
+
+
+class SectionBlock(BaseBlock):
+    """A section block for displaying text and interactive elements.
+
+    Basic block for displaying text content with optional interactive
+    element (accessory). Supports both plain text and markdown formatting
+    with multiple text field support.
+    """
+
+    type: typing.Literal['section'] = 'section'
+    text: TextObject | None = None
+    fields: list[TextObject] | None = None
+    accessory: BlockElement | None = None
+
+
+class DividerBlock(BaseBlock):
+    """A divider block for visual separation.
+
+    Simple block that displays a horizontal line to visually separate
+    content sections. Requires no additional configuration.
+    """
+
+    type: typing.Literal['divider'] = 'divider'
+
+
+class ImageBlock(BaseBlock):
+    """An image block for displaying images.
+
+    Displays an image with title and alternative text for accessibility.
+    Images must be publicly accessible or use Slack-hosted URLs.
+    """
+
+    type: typing.Literal['image'] = 'image'
+    image_url: str
+    alt_text: str
+    title: TextObject | None = None
+
+
+class ActionsBlock(BaseBlock):
+    """An actions block for interactive elements.
+
+    Container for interactive elements like buttons, select menus,
+    and other input elements. Can hold up to 25 elements in a
+    horizontal layout.
+    """
+
+    type: typing.Literal['actions'] = 'actions'
+    elements: list[BlockElement]
+
+
+class ContextBlock(BaseBlock):
+    """A context block for supplementary information.
+
+    Displays contextual information using small text and images.
+    Useful for metadata, timestamps, and supplementary details.
+    """
+
+    type: typing.Literal['context'] = 'context'
+    elements: list[TextObject | ImageElement]
+
+
+class InputBlock(BaseBlock):
+    """An input block for collecting user input.
+
+    Contains a single input element with label and optional hint text.
+    Used in modals and app home surfaces for form-like interactions.
+    """
+
+    type: typing.Literal['input'] = 'input'
+    label: TextObject
+    element: BlockElement
+    hint: TextObject | None = None
+    optional: bool | None = None
+    dispatch_action: bool | None = None
+
+
+class FileBlock(BaseBlock):
+    """A file block for displaying Slack files.
+
+    Displays information about a Slack file including thumbnail,
+    title, and metadata. Files must be shared in the workspace.
+    """
+
+    type: typing.Literal['file'] = 'file'
+    external_id: str
+    source: typing.Literal['remote'] = 'remote'
+
+
+class HeaderBlock(BaseBlock):
+    """A header block for section titles.
+
+    Displays large text intended as a section header. Text is always
+    rendered in plain text format for consistent styling.
+    """
+
+    type: typing.Literal['header'] = 'header'
+    text: TextObject
+
+
+class VideoBlock(BaseBlock):
+    """A video block for embedding video content.
+
+    Embeds video content from supported platforms with metadata
+    including title, description, and provider information.
+    """
+
+    type: typing.Literal['video'] = 'video'
+    video_url: str
+    thumbnail_url: str
+    alt_text: str
+    title: TextObject
+    title_url: str | None = None
+    description: TextObject | None = None
+    provider_icon_url: str | None = None
+    provider_name: str | None = None
+
+
+# Rich text blocks and elements
+class RichTextElement(pydantic.BaseModel):
+    """Base class for rich text elements."""
+
+    type: str
+
+
+class RichTextSection(RichTextElement):
+    """A rich text section containing formatted text elements."""
+
+    type: typing.Literal['rich_text_section'] = 'rich_text_section'
+    elements: list[dict]
+
+
+class RichTextList(RichTextElement):
+    """A rich text list (ordered or unordered)."""
+
+    type: typing.Literal['rich_text_list'] = 'rich_text_list'
+    style: typing.Literal['ordered', 'bullet']
+    elements: list[dict]
+    indent: int | None = None
+    border: int | None = None
+
+
+class RichTextQuote(RichTextElement):
+    """A rich text quote block."""
+
+    type: typing.Literal['rich_text_quote'] = 'rich_text_quote'
+    elements: list[dict]
+    border: int | None = None
+
+
+class RichTextPreformatted(RichTextElement):
+    """A rich text preformatted block."""
+
+    type: typing.Literal['rich_text_preformatted'] = 'rich_text_preformatted'
+    elements: list[dict]
+    border: int | None = None
+
+
+class RichTextBlock(BaseBlock):
+    """A rich text block for complex text formatting.
+
+    Supports advanced text formatting including lists, quotes,
+    preformatted text, and inline formatting like bold, italic,
+    and links.
+    """
+
+    type: typing.Literal['rich_text'] = 'rich_text'
+    elements: list[
+        RichTextSection | RichTextList | RichTextQuote | RichTextPreformatted
+    ]
+
+
+# Union type for all blocks
+Block = (
+    SectionBlock
+    | DividerBlock
+    | ImageBlock
+    | ActionsBlock
+    | ContextBlock
+    | InputBlock
+    | FileBlock
+    | HeaderBlock
+    | VideoBlock
+    | RichTextBlock
+)
+
+# Event Models
+
+
+class EventSubType(enum.StrEnum):
+    assistant_app_thread = 'assistant_app_thread'
+    bot_message = 'bot_message'
+    channel_archive = 'channel_archive'
+    channel_convert_to_private = 'channel_convert_to_private'
+    channel_convert_to_public = 'channel_convert_to_public'
+    channel_join = 'channel_join'
+    channel_leave = 'channel_leave'
+    channel_name = 'channel_name'
+    channel_posting_permissions = 'channel_posting_permissions'
+    channel_purpose = 'channel_purpose'
+    channel_topic = 'channel_topic'
+    channel_unarchive = 'channel_unarchive'
+    document_mention = 'document_mention'
+    ekm_access_denied = 'ekm_access_denied'
+    file_share = 'file_share'
+    message_changed = 'message_changed'
+    message_deleted = 'message_deleted'
+    me_message = 'me_message'
+    reminder_add = 'reminder_add'
+    thread_broadcast = 'thread_broadcast'
 
 
 class Channel(pydantic.BaseModel):
@@ -136,17 +708,17 @@ class User(pydantic.BaseModel):
         )
 
 
-class File(pydantic.BaseModel):
+class File(pydantic.BaseModel, extra='ignore'):
     """A file object contains information about a file shared with a workspace.
 
     Represents a file shared within a Slack workspace, including unique
     identifier, creation timestamp, file metadata like name, type, and size,
     user who uploaded the file, sharing information, and thumbnail/preview
     URLs.
-    Authentication is required to access file URLs.
-    """
 
-    model_config = pydantic.ConfigDict(extra='ignore')
+    Authentication is required to access file URLs.
+
+    """
 
     id: str
     name: str
@@ -167,22 +739,6 @@ class FileContent(pydantic.BaseModel):
 
     mimetype: str
     content: str | bytes
-
-
-class ChatMessage(pydantic.BaseModel):
-    """Represents a processed Slack message for bot operations.
-
-    Used internally by the bot for conversation history and context,
-    containing user information, message content, file attachments,
-    and temporal data for thread organization.
-    """
-
-    user: User
-    content: str
-    files: list[File] | None = None
-    ts: str
-    thread_ts: str
-    timestamp: datetime.datetime
 
 
 class Reaction(pydantic.BaseModel):
@@ -260,14 +816,18 @@ class MessageEvent(BaseSlackEvent):
     """
 
     type: typing.Literal['message'] = 'message'
-    channel: str
-    user: str
-    text: str
     ts: str
+    channel: str | None = None
+    text: str | None = None
+    user: str | None = None
     thread_ts: str | None = None
     subtype: str | None = None
+    bot_id: str | None = None
+    blocks: list[Block] | None = None
+    channel_type: str | None = None
     edited: MessageEdited | None = None
     files: list[File] | None = None
+    message: typing.Self | None = None
     reactions: list[Reaction] | None = None
     is_starred: bool | None = None
     pinned_to: list[str] | None = None

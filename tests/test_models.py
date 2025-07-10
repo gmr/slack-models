@@ -1,6 +1,5 @@
 """Comprehensive tests for all slack-models Pydantic models."""
 
-import datetime
 import unittest
 
 import pydantic
@@ -10,7 +9,6 @@ import slack_models
 from .test_data import (
     AUTHORIZATION_DATA,
     CHANNEL_DATA,
-    CHAT_MESSAGE_DATA,
     ENTERPRISE_USER_DATA,
     FILE_CONTENT_DATA,
     FILE_DATA,
@@ -273,38 +271,6 @@ class TestFileContent(unittest.TestCase):
         self.assertEqual(file_content.content, b'\\x89PNG\\r\\n\\x1a\\n')
 
 
-class TestChatMessage(unittest.TestCase):
-    """Test ChatMessage model."""
-
-    def test_chat_message_full_data(self) -> None:
-        """Test ChatMessage with all fields."""
-        chat_message = slack_models.ChatMessage(**CHAT_MESSAGE_DATA)
-
-        self.assertIsInstance(chat_message.user, slack_models.User)
-        self.assertEqual(chat_message.content, 'Hello, world!')
-        self.assertEqual(len(chat_message.files), 1)
-        self.assertIsInstance(chat_message.files[0], slack_models.File)
-        self.assertEqual(chat_message.ts, '1640995200.000100')
-        self.assertEqual(chat_message.thread_ts, '1640995200.000100')
-        self.assertIsInstance(chat_message.timestamp, datetime.datetime)
-
-    def test_chat_message_minimal_data(self) -> None:
-        """Test ChatMessage with minimal required fields."""
-        chat_message = slack_models.ChatMessage(
-            user=slack_models.User(id='U1234567890'),
-            content='Hello!',
-            ts='1640995200.000100',
-            thread_ts='1640995200.000100',
-            timestamp=datetime.datetime.fromtimestamp(
-                1640995200, tz=datetime.UTC
-            ),
-        )
-
-        self.assertEqual(chat_message.user.id, 'U1234567890')
-        self.assertEqual(chat_message.content, 'Hello!')
-        self.assertIsNone(chat_message.files)
-
-
 class TestReaction(unittest.TestCase):
     """Test Reaction model."""
 
@@ -478,11 +444,6 @@ class TestValidation(unittest.TestCase):
         """Test FileContent validation fails for missing required fields."""
         with self.assertRaises(pydantic.ValidationError):
             slack_models.FileContent()
-
-    def test_chat_message_missing_required_fields(self) -> None:
-        """Test ChatMessage validation fails for missing required fields."""
-        with self.assertRaises(pydantic.ValidationError):
-            slack_models.ChatMessage()
 
     def test_invalid_data_types(self) -> None:
         """Test validation fails for invalid data types."""
