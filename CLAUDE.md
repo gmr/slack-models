@@ -19,7 +19,7 @@ Comprehensive Pydantic models for working with the Slack API, providing type-saf
 - **Event System**: `EVENT_MAP` dictionary for type-based event model selection
 - **Parser Utility**: `parse_event()` function for webhook payload parsing
 
-### Key Models (26 total)
+### Key Models (64+ total)
 **Event Models**: `MessageEvent`, `AppMentionEvent`, `ReactionAddedEvent`, `ReactionRemovedEvent`, `ChannelCreatedEvent`, `ChannelDeletedEvent`, `ChannelRenameEvent`, `TeamJoinEvent`, `FileCreatedEvent`, `FileDeletedEvent`
 
 **Core Objects**: `Channel`, `User`, `UserProfile`, `EnterpriseUser`, `File`, `FileContent`, `Authorization`, `ChatMessage`
@@ -28,7 +28,15 @@ Comprehensive Pydantic models for working with the Slack API, providing type-saf
 
 **Supporting Models**: `Reaction`, `MessageItem`, `MessageEdited`, `BaseSlackEvent`
 
-**Union Types**: `SlackEvent` (all event types), `SlackWebhookPayload` (all webhook payloads)
+**Block Kit Models**: `SectionBlock`, `DividerBlock`, `ImageBlock`, `ActionsBlock`, `ContextBlock`, `InputBlock`, `HeaderBlock`, `VideoBlock`, `RichTextBlock`, `FileBlock`
+
+**Block Elements**: `ButtonElement`, `StaticSelectElement`, `CheckboxesElement`, `DatePickerElement`, `PlainTextInputElement`, `NumberInputElement`, `EmailInputElement`, `URLInputElement`, `FileInputElement`, `ImageElement`, `OverflowElement`, `RadioButtonsElement`, `TimePickerElement`, `DatetimePickerElement`, `ChannelsSelectElement`, `ConversationsSelectElement`, `UsersSelectElement`, `ExternalSelectElement`
+
+**Composition Objects**: `TextObject`, `ConfirmationDialog`, `Option`, `OptionGroup`
+
+**Rich Text Elements**: `RichTextSection`, `RichTextList`, `RichTextQuote`, `RichTextPreformatted`
+
+**Union Types**: `SlackEvent` (all event types), `SlackWebhookPayload` (all webhook payloads), `Block` (all block types), `BlockElement` (all block elements)
 
 ### API Compliance
 - **Standards Compliant**: Strict adherence to official Slack API specifications
@@ -166,13 +174,14 @@ model_class = EVENT_MAP.get('message')  # Returns MessageEvent
 
 ## Testing Strategy
 
-### Test Organization (6 modules)
+### Test Organization (7 modules)
 - **test_data.py**: Test fixtures and data constants
 - **test_events.py**: Event model validation tests
 - **test_imports.py**: Import system and module structure tests
 - **test_models.py**: Core model validation tests
 - **test_unions_and_utils.py**: Union types and utility function tests
 - **test_webhooks.py**: Webhook payload model tests
+- **test_blocks.py**: Block Kit model validation tests
 
 ### Coverage Details
 - **Total Coverage**: 99% (236 statements, 2 missed)
@@ -244,7 +253,7 @@ slack-models/
 │   ├── _models.py            # Pydantic model definitions
 │   ├── _utils.py             # Utility functions
 │   └── py.typed              # Type annotations marker
-├── tests/                    # Test suite (6 modules)
+├── tests/                    # Test suite (7 modules)
 ├── docs/                     # MkDocs documentation
 ├── pyproject.toml           # Project configuration
 └── mkdocs.yml               # Documentation configuration

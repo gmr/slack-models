@@ -11,7 +11,7 @@ slack-models provides type-safe, validated data structures for Slack API integra
 
 ## 🚀 Features
 
-- **Complete Coverage**: Models for all major Slack events, objects, and webhook payloads
+- **Complete Coverage**: Models for all major Slack events, objects, webhook payloads, and Block Kit elements
 - **Type Safety**: Full type annotations with Python 3.12+ modern type hints
 - **Validation**: Automatic data validation using Pydantic 2.x
 - **IDE Support**: Excellent autocomplete and type checking
@@ -133,6 +133,11 @@ slack-models supports all major Slack event types:
 ### File Events
 - `FileCreatedEvent`: File uploads
 - `FileDeletedEvent`: File deletions
+
+### Block Kit Models
+- **Blocks**: `SectionBlock`, `DividerBlock`, `ImageBlock`, `ActionsBlock`, `ContextBlock`, `InputBlock`, `HeaderBlock`, `VideoBlock`, `RichTextBlock`, `FileBlock`
+- **Elements**: `ButtonElement`, `StaticSelectElement`, `CheckboxesElement`, `DatePickerElement`, `PlainTextInputElement`, and more
+- **Composition Objects**: `TextObject`, `ConfirmationDialog`, `Option`, `OptionGroup`
 
 ### Webhook Types
 - `SlackEventCallback`: Standard event callbacks

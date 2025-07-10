@@ -10,16 +10,31 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.UserProfile
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.EnterpriseUser
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### Channel Models
 
@@ -27,6 +42,11 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### File Models
 
@@ -34,11 +54,271 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.FileContent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+## Block Kit Models
+
+### Composition Objects
+
+::: slack_models.TextObject
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.ConfirmationDialog
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.Option
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.OptionGroup
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+### Block Types
+
+::: slack_models.SectionBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.DividerBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.ImageBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.ActionsBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.ContextBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.InputBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.HeaderBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.VideoBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.RichTextBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.FileBlock
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+### Block Elements
+
+::: slack_models.ButtonElement
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.StaticSelectElement
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.CheckboxesElement
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.DatePickerElement
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.PlainTextInputElement
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.ImageElement
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+### Rich Text Elements
+
+::: slack_models.RichTextSection
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.RichTextList
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.RichTextQuote
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
+
+::: slack_models.RichTextPreformatted
+    options:
+      show_root_heading: true
+      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ## Event Models
 
@@ -48,21 +328,41 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.MessageItem
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.MessageEdited
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.AppMentionEvent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### Reaction Events
 
@@ -70,16 +370,31 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.ReactionRemovedEvent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.Reaction
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### Channel Events
 
@@ -87,16 +402,31 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.ChannelDeletedEvent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.ChannelRenameEvent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### Team Events
 
@@ -104,6 +434,11 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### File Events
 
@@ -111,11 +446,21 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.FileDeletedEvent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ## Webhook Models
 
@@ -125,11 +470,21 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.BaseSlackEvent
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ### Verification and Rate Limiting
 
@@ -137,11 +492,21 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ::: slack_models.SlackAppRateLimited
     options:
       show_root_heading: true
       show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ## Supporting Models
 
@@ -151,13 +516,11 @@ This page provides comprehensive documentation for all Pydantic models provided 
     options:
       show_root_heading: true
       show_source: true
-
-### Chat Messages
-
-::: slack_models.ChatMessage
-    options:
-      show_root_heading: true
-      show_source: true
+      members:
+        - __init__
+      show_object_full_path: false
+      docstring_section_style: table
+      group_by_category: true
 
 ## Union Types
 

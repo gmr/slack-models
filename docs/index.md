@@ -8,6 +8,7 @@ slack-models is designed to make working with Slack API data easier and more rel
 
 - **Type Safety**: Comprehensive Pydantic models with full type annotations
 - **Event Processing**: Models for all major Slack event types including messages, reactions, and channel events
+- **Block Kit Support**: Complete models for Slack's Block Kit framework including blocks, elements, and composition objects
 - **Webhook Support**: Complete webhook payload models for event callbacks and verifications
 - **Data Validation**: Automatic validation and parsing of Slack API responses
 - **Modern Python**: Built for Python 3.12+ with modern type hints
@@ -17,6 +18,7 @@ slack-models is designed to make working with Slack API data easier and more rel
 ### 🎯 Complete Coverage
 - **Core Objects**: User, Channel, File, and other fundamental Slack objects
 - **Event Models**: Message, reaction, channel, and team events
+- **Block Kit Models**: Blocks, interactive elements, and composition objects for rich messaging
 - **Webhook Models**: Event callbacks, URL verification, and rate limiting
 - **Supporting Models**: Reactions, message items, authorizations, and more
 

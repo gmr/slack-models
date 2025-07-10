@@ -369,3 +369,134 @@ if isinstance(event, SlackEventCallback):
     if message:
         print(f"Message: {message.text}")
 ```
+
+## Block Kit Examples
+
+### Creating Basic Blocks
+
+```python
+from slack_models import (
+    SectionBlock, DividerBlock, TextObject, ButtonElement, ActionsBlock
+)
+
+# Create a section block with markdown text
+section = SectionBlock(
+    text=TextObject(
+        type="mrkdwn",
+        text="Welcome to the team! Here are some quick actions:"
+    )
+)
+
+# Create a divider block
+divider = DividerBlock()
+
+# Create an actions block with buttons
+actions = ActionsBlock(
+    elements=[
+        ButtonElement(
+            action_id="get_started",
+            text=TextObject(type="plain_text", text="Get Started"),
+            style="primary"
+        ),
+        ButtonElement(
+            action_id="learn_more",
+            text=TextObject(type="plain_text", text="Learn More")
+        )
+    ]
+)
+
+print(f"Section text: {section.text.text}")
+print(f"Button count: {len(actions.elements)}")
+```
+
+### Working with Interactive Elements
+
+```python
+from slack_models import (
+    StaticSelectElement, Option, TextObject, DatePickerElement,
+    CheckboxesElement
+)
+
+# Create a static select menu
+select_menu = StaticSelectElement(
+    action_id="priority_select",
+    placeholder=TextObject(type="plain_text", text="Select priority"),
+    options=[
+        Option(
+            text=TextObject(type="plain_text", text="High"),
+            value="high"
+        ),
+        Option(
+            text=TextObject(type="plain_text", text="Medium"),
+            value="medium"
+        ),
+        Option(
+            text=TextObject(type="plain_text", text="Low"),
+            value="low"
+        )
+    ]
+)
+
+# Create a date picker
+date_picker = DatePickerElement(
+    action_id="due_date",
+    placeholder=TextObject(type="plain_text", text="Select due date")
+)
+
+# Create checkboxes
+checkboxes = CheckboxesElement(
+    action_id="features",
+    options=[
+        Option(
+            text=TextObject(type="plain_text", text="Email notifications"),
+            value="email_notifications"
+        ),
+        Option(
+            text=TextObject(type="plain_text", text="SMS alerts"),
+            value="sms_alerts"
+        )
+    ]
+)
+
+print(f"Select options: {len(select_menu.options)}")
+print(f"Checkbox options: {len(checkboxes.options)}")
+```
+
+### Processing Block Kit from Events
+
+```python
+from slack_models import parse_event, SlackEventCallback, MessageEvent
+
+# Example message event with blocks
+message_with_blocks = {
+    "type": "event_callback",
+    "event": {
+        "type": "message",
+        "channel": "C1234567890",
+        "user": "U1234567890",
+        "text": "This message has blocks",
+        "ts": "1234567890.123456",
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Hello from Block Kit!"
+                }
+            },
+            {
+                "type": "divider"
+            }
+        ]
+    }
+}
+
+event = parse_event(message_with_blocks)
+if isinstance(event, SlackEventCallback):
+    if isinstance(event.event, MessageEvent):
+        message = event.event
+        if message.blocks:
+            print(f"Message has {len(message.blocks)} blocks")
+            for block in message.blocks:
+                print(f"Block type: {block.type}")
+```
